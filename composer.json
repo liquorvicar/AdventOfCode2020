@@ -1,0 +1,25 @@
+{
+    "name": "andy/advent-of-code2019",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Andy Clyde",
+            "email": "me@andyclyde.com"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^9.4",
+        "monolog/monolog": "^2.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "AdventOfCode\\": ["src/", "test/"]
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --testdox",
+        "one": "php run.php -pone",
+        "two": "php run.php -ptwo"
+    }
+}
