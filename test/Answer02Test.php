@@ -71,7 +71,7 @@ class Answer02Test extends BaseTest
         return [
             [1, 3, 'a', 'abcde', true],
             [1, 3, 'b', 'cdefg', false],
-            [2, 9, 'c', 'ccccccccc', true],
+            [2, 9, 'c', 'ccccccccc', false],
         ];
     }
 
