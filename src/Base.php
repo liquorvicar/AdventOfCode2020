@@ -23,4 +23,11 @@ abstract class Base
 
     abstract public function two(Array $input);
 
+    protected function numbers(array $input): array
+    {
+        return array_filter(array_map(function ($value) {
+            return (int)$value;
+        }, $input));
+    }
+
 }

@@ -14,7 +14,8 @@
     },
     "autoload": {
         "psr-4": {
-            "AdventOfCode\\": ["src/", "test/"]
+            "AdventOfCode\\": "src/",
+            "AdventOfCode\\Test\\": "test/"
         }
     },
     "scripts": {

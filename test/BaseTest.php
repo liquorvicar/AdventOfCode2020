@@ -1,6 +1,6 @@
 <?php
 
-namespace AdventOfCode;
+namespace AdventOfCode\Test;
 
 use Monolog\Logger;
 use PHPUnit\Framework\TestCase;
