@@ -7,6 +7,8 @@
             "email": "me@andyclyde.com"
         }
     ],
+    "description": "My AoC 2020 code",
+    "license": "MIT",
     "require": {},
     "require-dev": {
         "phpunit/phpunit": "^9.4",
