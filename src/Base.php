@@ -30,4 +30,10 @@ abstract class Base
         }, $input));
     }
 
+    public function trim(array $input): array
+    {
+        return array_filter($input, function ($line) {
+            return trim($line);
+        });
+    }
 }
