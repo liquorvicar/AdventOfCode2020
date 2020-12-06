@@ -20,8 +20,6 @@ $logger->pushHandler(new Monolog\Handler\StreamHandler('php://stdout', Monolog\L
 $class = sprintf('AdventOfCode\Answer%02d', $day);
 $answer = new $class($logger);
 
-$input = $answer->trim($input);
-
 if (isset($options['p']) && $options['p'] === 'two') {
     echo $answer->two($input);
 } else {
