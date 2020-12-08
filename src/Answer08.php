@@ -2,44 +2,46 @@
 
 namespace AdventOfCode;
 
+use AdventOfCode\App\Handheld\CommandFactory;
+use AdventOfCode\App\Handheld\CPU;
+use AdventOfCode\App\Handheld\Program;
+use AdventOfCode\App\Handheld\Registry;
+
 class Answer08 extends Base
 {
 
     public function one(array $input)
     {
-        $program = $this->trim($input);
+        $commands = $this->trim($input);
 
-        $result = $this->runProgram($program);
+        $commands = array_map(function ($command) {
+            return CommandFactory::create($command);
+        }, $commands);
 
-        return $result['acc'];
+        $program = new Program($commands);
+        $cpu = new CPU();
+        $registry = $cpu->run($program, new Registry(0, 0));
+
+        return $registry->getAccumulator();
     }
 
     public function two(array $input)
     {
-        $program = $this->trim($input);
-        $terminated = false;
+        $commands = $this->trim($input);
+        $commands = array_map(function ($command) {
+            return CommandFactory::create($command);
+        }, $commands);
         $acc = 0;
 
-        foreach ($program as $lineNum => $line) {
-            $newProgram = $program;
-            $command = substr($line, 0, 3);
-            switch ($command) {
-                case 'acc':
-                    break;
-                case 'jmp':
-                    $newProgram[$lineNum] = str_replace('jmp', 'nop', $line);
-                    $result = $this->runProgram($newProgram);
-                    $terminated = $result['terminated'];
-                    $acc = $result['acc'];
-                    break;
-                case 'nop':
-                    $newProgram[$lineNum] = str_replace('nop', 'jmp', $line);
-                    $result = $this->runProgram($newProgram);
-                    $terminated = $result['terminated'];
-                    $acc = $result['acc'];
-                    break;
-            }
-            if ($terminated) {
+        foreach ($commands as $lineNum => $command) {
+            $newCommands = $commands;
+            $newCommands[$lineNum] = $command->repair();
+            $program = new Program($newCommands);
+            $cpu = new CPU();
+            $registry = $cpu->run($program, new Registry(0, 0));
+
+            if ($registry->isTerminated()) {
+                $acc = $registry->getAccumulator();
                 break;
             }
         }
