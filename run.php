@@ -2,7 +2,7 @@
 
 require_once 'vendor/autoload.php';
 
-ini_set('memory_limit', '512M');
+ini_set('memory_limit', '3072M');
 
 $options = getopt('p:', ['day:']);
 
