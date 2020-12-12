@@ -32,8 +32,8 @@ abstract class Base
 
     public function trim(array $input): array
     {
-        return array_filter($input, function ($line) {
+        return array_filter(array_map(function ($line) {
             return trim($line);
-        });
+        }, $input));
     }
 }
