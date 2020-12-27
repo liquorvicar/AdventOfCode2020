@@ -20,30 +20,41 @@ class Answer23Test extends BaseTest
     /**
      * @dataProvider dataForMakeMoves
      */
-    public function testMakeMoves($input, $numMoves, $output)
+    public function testMakeMoves($input, $numMoves, $expected)
     {
         $cups = $this->answer->makeMoves($input, $numMoves);
-        $this->assertEquals($output, implode($cups));
+        $next = $cups[1]['next'];
+        $output = '1';
+        while ($next !== 1) {
+            $output.= (string)$next;
+            $next = $cups[$next]['next'];
+        }
+        $this->assertEquals($expected, $output);
     }
 
     public function dataForMakeMoves()
     {
         return [
-            ['389125467', 1, '289154673'],
-            ['389125467', 2, '546789132'],
-            ['389125467', 3, '891346725'],
-            ['389125467', 4, '467913258'],
+            ['389125467', 1, '154673289'],
+            ['389125467', 2, '132546789'],
+            ['389125467', 3, '134672589'],
+            ['389125467', 4, '132584679'],
             ['389125467', 5, '136792584'],
-            ['389125467', 6, '936725841'],
-            ['389125467', 7, '258367419'],
-            ['389125467', 8, '674158392'],
-            ['389125467', 9, '574183926'],
-            ['389125467', 10, '837419265'],
+            ['389125467', 6, '193672584'],
+            ['389125467', 7, '192583674'],
+            ['389125467', 8, '158392674'],
+            ['389125467', 9, '183926574'],
+            ['389125467', 10, '192658374'],
         ];
     }
 
     public function testOne()
     {
         $this->assertEquals('67384529', $this->answer->one(['389125467']));
+    }
+
+    public function testTwo()
+    {
+        $this->assertEquals('67384529', $this->answer->two(['389125467']));
     }
 }

@@ -9,42 +9,64 @@ class Answer23 extends Base
     {
         $input = reset($input);
         $final = $this->makeMoves(trim($input), 100);
-        $one = array_search(1, $final);
-        $final = array_merge(array_slice($final, $one + 1), array_slice($final, 0, $one));
+        $next = $final[1]['next'];
+        $output = '';
+        while ($next !== 1) {
+            $output.= (string)$next;
+            $next = $final[$next]['next'];
+        }
 
-        return implode($final);
+        return $output;
     }
 
     public function two(array $input)
     {
         $input = reset($input);
         $final = $this->makeMoves(trim($input), 10000000, true);
-        $one = array_search(1, $final);
+        $next = $final[1]['next'];
 
-        return $final[$one + 1] * $final[$one + 2];
+        return $next * $final[$next]['next'];
     }
 
     public function makeMoves(string $cups, int $numMoves, $MillionCups = false): array
     {
-        $currentPos = 0;
-        $cups = array_map('intval', str_split($cups));
+        $rawCups = str_split($cups);
+        $cups = [];
+        $last = null;
+        $first = $next = (int)array_shift($rawCups);
+        while (!empty($rawCups)) {
+            $current = $next;
+            $next = (int)array_shift($rawCups);
+            $cups[$current] = [
+                'next' => $next,
+            ];
+        }
+        $last = $next;
+        $cups[$next] = [
+            'next' => null,
+        ];
         if ($MillionCups) {
-            $max = max($cups);
+            $next = max(array_keys($cups));
+            $next += 1;
+            $cups[$last]['next'] = $next;
             while (count($cups) < 1000000) {
-                $max += 1;
-                $cups[] = $max;
+                $current = $last = $next;
+                $next += 1;
+                $cups[$current] = [
+                    'next' => $next,
+                ];
             }
         }
+        $cups[$last]['next'] = $first;
         $numCups = count($cups);
+        reset($cups);
+        $currentCup = key($cups);
         for ($i = 1; $i <= $numMoves; $i++) {
-            if ($i % 10000 === 0) {
-                $this->logger->debug('Move', ['move' => $i]);
-            }
-            $currentCup = array_shift($cups);
-            $cups[] = $currentCup;
             $extract = [];
+            $nextExtract = $currentCup;
             while (count($extract) < 3) {
-                $extract[] = array_shift($cups);
+                $nextExtract = $cups[$nextExtract]['next'];
+                $extract[] = $nextExtract;
             }
             $found = false;
             $newCup = $currentCup;
@@ -57,18 +79,12 @@ class Answer23 extends Base
                     $found = true;
                 }
             }
-            $done = false;
-            while (!$done) {
-                $cup = array_shift($cups);
-                $cups[] = $cup;
-                if ($cup === $newCup) {
-                    $cups = array_merge($cups, $extract);
-                    $extract = [];
-                }
-                if (empty($extract) && $cup === $currentCup) {
-                    $done = true;
-                }
-            }
+            $afterExtract = $cups[$extract[2]]['next'];
+            $cups[$currentCup]['next'] = $afterExtract;
+            $afterExtract = $cups[$newCup]['next'];
+            $cups[$newCup]['next'] = $extract[0];
+            $cups[$extract[2]]['next'] = $afterExtract;
+            $currentCup = $cups[$currentCup]['next'];
         }
 
         return $cups;
