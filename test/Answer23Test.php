@@ -47,14 +47,4 @@ class Answer23Test extends BaseTest
             ['389125467', 10, '192658374'],
         ];
     }
-
-    public function testOne()
-    {
-        $this->assertEquals('67384529', $this->answer->one(['389125467']));
-    }
-
-    public function testTwo()
-    {
-        $this->assertEquals('67384529', $this->answer->two(['389125467']));
-    }
 }

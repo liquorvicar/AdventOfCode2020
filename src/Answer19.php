@@ -49,7 +49,7 @@ class Answer19 extends Base
         $ruleToCheck = '~^' . $rules[0] . '$~';
         $rule42 = '~^' . $rules[42] . '$~';
         $rule31 = '~^' . $rules[31] . '$~';
-        $matchingMessages = array_filter($messages, function ($message) use ($ruleToCheck, $rule42, $rule31, $actualMatches) {
+        $matchingMessages = array_filter($messages, function ($message) use ($ruleToCheck, $rule42, $rule31) {
             if (preg_match_all($ruleToCheck, $message) < 1) {
                 return false;
             }
